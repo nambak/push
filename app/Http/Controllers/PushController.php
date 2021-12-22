@@ -34,22 +34,16 @@ class PushController extends Controller
 
         $downstreamResponse = FCM::sendTo($tokens, $option, $notification, $data);
 
-        dump($tokens);
+        $results = [
+            'number_success'      => $downstreamResponse->numberSuccess(),
+            'number_failure'      => $downstreamResponse->numberFailure(),
+            'number_modification' => $downstreamResponse->numberModification(),
+            'tokens_to_delete'    => $downstreamResponse->tokensToDelete(), // return Array - you must remove all this tokens in your database
+            'tokens_to_modify'    => $downstreamResponse->tokensToModify(), // return Array (key : oldToken, value : new token - you must change the token in your database)
+            'tokens_to_retry'     => $downstreamResponse->tokensToRetry(), // return Array - you should try to resend the message to the tokens in the array
+            'tokens_with_error'   => $downstreamResponse->tokensWithError() // return Array (key:token, value:error) - in production you should remove from your database the tokens
+        ];
 
-        dump($downstreamResponse->numberSuccess());
-        dump($downstreamResponse->numberFailure());
-        dump($downstreamResponse->numberModification());
-
-        // return Array - you must remove all this tokens in your database
-        dump($downstreamResponse->tokensToDelete());
-
-        // return Array (key : oldToken, value : new token - you must change the token in your database)
-        dump($downstreamResponse->tokensToModify());
-
-        // return Array - you should try to resend the message to the tokens in the array
-        dump($downstreamResponse->tokensToRetry());
-
-        // return Array (key:token, value:error) - in production you should remove from your database the tokens
-        dump($downstreamResponse->tokensWithError());
+        return $results;
     }
 }
