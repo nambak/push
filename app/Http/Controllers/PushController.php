@@ -13,10 +13,11 @@ class PushController extends Controller
         $tokens = User::whereIn('id', $request->users)->get()->pluck('device_key')->toArray();
 
         $response = CloudMessaging::send([
-            'title' => $request->title,
+            'title'   => $request->title,
             'message' => $request->message,
-            'tokens' => $tokens,
-            'image' => $request->filled('image') ? $request->image : null
+            'tokens'  => $tokens,
+            'image'   => $request->filled('image') ? $request->image : null,
+            'data'    => $request->filled('data') ? $request->data : null,
         ]);
 
         return $response;

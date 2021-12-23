@@ -23,6 +23,10 @@ class CloudMessaging
 
         $dataBuilder = new PayloadDataBuilder();
 
+        if (isset($params['data'])) {
+            $dataBuilder->addData(['data' => $params['data']]);
+        }
+
         $option = $optionBuilder->build();
         $notification = $notificationBuilder->build();
         $data = $dataBuilder->build();

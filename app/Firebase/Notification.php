@@ -10,22 +10,11 @@ class Notification extends PayloadNotification
 
     public function __construct(NotificationBuilder $builder)
     {
-        $this->title = $builder->getTitle();
-        $this->body = $builder->getBody();
-        $this->icon = $builder->getIcon();
-        $this->sound = $builder->getSound();
-        $this->badge = $builder->getBadge();
-        $this->tag = $builder->getTag();
-        $this->color = $builder->getColor();
-        $this->clickAction = $builder->getClickAction();
-        $this->bodyLocationKey = $builder->getBodyLocationKey();
-        $this->bodyLocationArgs = $builder->getBodyLocationArgs();
-        $this->titleLocationKey = $builder->getTitleLocationKey();
-        $this->titleLocationArgs = $builder->getTitleLocationArgs();
-        $this->image = $builder->getImage(); // Set image
+        parent::__construct($builder);
+        $this->image = $builder->getImage();
     }
 
-    function toArray()
+    public function toArray()
     {
         $notification = [
             'title'          => $this->title,
@@ -40,7 +29,7 @@ class Notification extends PayloadNotification
             'body_loc_args'  => $this->bodyLocationArgs,
             'title_loc_key'  => $this->titleLocationKey,
             'title_loc_args' => $this->titleLocationArgs,
-            'image'          => $this->image
+            'image'          => $this->image,
         ];
 
         $notification = array_filter($notification, function ($value) {
