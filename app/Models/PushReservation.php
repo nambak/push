@@ -13,7 +13,7 @@ class PushReservation extends Model
     {
         $now = self::generateTenMinutesTime('Y-m-d H:i');
 
-        return self::where(['date', $now])->get();
+        return self::where('date', $now)->get();
     }
 
     public static function getWeeklyMessage()
