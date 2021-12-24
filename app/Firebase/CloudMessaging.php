@@ -2,13 +2,15 @@
 
 namespace App\Firebase;
 
+use App\Firebase\NotificationBuilder as PayloadNotificationBuilder;
 use App\Models\PushReservation;
+use App\Models\User;
 use App\Notifications\SendReservationPush;
+use Illuminate\Support\Facades\Notification as SlackNotification;
 use LaravelFCM\Facades\FCM;
 use LaravelFCM\Message\OptionsBuilder;
 use LaravelFCM\Message\PayloadDataBuilder;
-use App\Firebase\NotificationBuilder as PayloadNotificationBuilder;
-use Illuminate\Support\Facades\Notification as SlackNotification;
+
 class CloudMessaging
 {
     public static function send(array $params)
@@ -52,9 +54,10 @@ class CloudMessaging
     public static function sendReservationOnce()
     {
         $messages = PushReservation::getOneTimeMessage();
+        $tokens = User::getAllowPushMessage();
 
         foreach ($messages as $message) {
-            $params = self::generateParams($message);
+            $params = self::generateParams($message, $tokens);
 
             self::send($params);
 
@@ -66,9 +69,10 @@ class CloudMessaging
     public static function sendReservations()
     {
         $messages = PushReservation::getWeeklyMessage();
+        $tokens = User::getAllowPushMessage();
 
         foreach ($messages as $message) {
-            $params = self::generateParams($message);
+            $params = self::generateParams($message, $tokens);
 
             self::send($params);
 
@@ -77,13 +81,14 @@ class CloudMessaging
         }
     }
 
-    public static function generateParams($data)
+    public static function generateParams($data, $tokens)
     {
         return [
             'title'   => $data->title,
             'message' => $data->message,
             'image'   => isset($data->image) ? $data->image : null,
-            'data'    => isset($data->data) ? json_decode($data->data) : null
+            'data'    => isset($data->data) ? json_decode($data->data) : null,
+            'tokens'  => $tokens,
         ];
     }
 }
