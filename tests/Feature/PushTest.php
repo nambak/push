@@ -12,11 +12,12 @@ class PushTest extends TestCase
         $response = $this->post('/api/send_push', [
             'title'   => '상품 바로가기 테스트',
             'message' => '상품ID : 1103',
-            'users'   => [7],
             'image'   => 'https://cdn1.byapps.co.kr/push/202112/10minute1640161700.png',
             'data'    => json_encode(['name' => 'productDetail', 'id' => 1103]),
         ]);
 
         $response->assertStatus(200);
+
+        dump($response->getContent());
     }
 }

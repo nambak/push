@@ -10,7 +10,7 @@ class PushController extends Controller
 {
     public function send(Request $request)
     {
-        $tokens = User::whereIn('id', $request->users)->get()->pluck('device_key')->toArray();
+        $tokens = User::getAllowPushMessage();
 
         $response = CloudMessaging::send([
             'title'   => $request->title,

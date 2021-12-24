@@ -41,4 +41,16 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public static function getAllowPushMessage()
+    {
+        return self::where([
+            ['send_marketing_push' , 1],
+            ['send_push_message', 1]
+        ])
+            ->whereNotNull('device_key')
+            ->get()
+            ->pluck('device_key')
+            ->toArray();
+    }
 }
