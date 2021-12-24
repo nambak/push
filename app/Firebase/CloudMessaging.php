@@ -3,10 +3,12 @@
 namespace App\Firebase;
 
 use App\Models\PushReservation;
+use App\Notifications\SendReservationPush;
 use LaravelFCM\Facades\FCM;
 use LaravelFCM\Message\OptionsBuilder;
 use LaravelFCM\Message\PayloadDataBuilder;
 use App\Firebase\NotificationBuilder as PayloadNotificationBuilder;
+use Illuminate\Support\Facades\Notification as SlackNotification;
 class CloudMessaging
 {
     public static function send(array $params)
@@ -55,6 +57,9 @@ class CloudMessaging
             $params = self::generateParams($message);
 
             self::send($params);
+
+            SlackNotification::route('slack', config('logging.channels.slack.url'))
+                ->notify(new SendReservationPush($message));
         }
     }
 
@@ -66,6 +71,9 @@ class CloudMessaging
             $params = self::generateParams($message);
 
             self::send($params);
+
+            SlackNotification::route('slack', config('logging.channels.slack.url'))
+                ->notify(new SendReservationPush($message));
         }
     }
 
