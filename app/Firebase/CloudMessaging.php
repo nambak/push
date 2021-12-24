@@ -2,6 +2,7 @@
 
 namespace App\Firebase;
 
+use App\Models\PushReservation;
 use LaravelFCM\Facades\FCM;
 use LaravelFCM\Message\OptionsBuilder;
 use LaravelFCM\Message\PayloadDataBuilder;
@@ -37,12 +38,44 @@ class CloudMessaging
             'number_success'      => $downstreamResponse->numberSuccess(),
             'number_failure'      => $downstreamResponse->numberFailure(),
             'number_modification' => $downstreamResponse->numberModification(),
-            'tokens_to_delete'    => $downstreamResponse->tokensToDelete(), // return Array - you must remove all this tokens in your database
-            'tokens_to_modify'    => $downstreamResponse->tokensToModify(), // return Array (key : oldToken, value : new token - you must change the token in your database)
-            'tokens_to_retry'     => $downstreamResponse->tokensToRetry(), // return Array - you should try to resend the message to the tokens in the array
-            'tokens_with_error'   => $downstreamResponse->tokensWithError() // return Array (key:token, value:error) - in production you should remove from your database the tokens
+            'tokens_to_delete'    => $downstreamResponse->tokensToDelete(), // you must remove all this tokens in your database
+            'tokens_to_modify'    => $downstreamResponse->tokensToModify(), // (key : oldToken, value : new token - you must change the token in your database)
+            'tokens_to_retry'     => $downstreamResponse->tokensToRetry(), // you should try to resend the message to the tokens in the array
+            'tokens_with_error'   => $downstreamResponse->tokensWithError() // (key:token, value:error) - in production you should remove from your database the tokens
         ];
 
         return $results;
+    }
+
+    public static function sendReservationOnce()
+    {
+        $messages = PushReservation::getOneTimeMessage();
+
+        foreach ($messages as $message) {
+            $params = self::generateParams($message);
+
+            self::send($params);
+        }
+    }
+
+    public static function sendReservations()
+    {
+        $messages = PushReservation::getWeeklyMessage();
+
+        foreach ($messages as $message) {
+            $params = self::generateParams($message);
+
+            self::send($params);
+        }
+    }
+
+    public static function generateParams($data)
+    {
+        return [
+            'title'   => $data->title,
+            'message' => $data->message,
+            'image'   => isset($data->image) ? $data->image : null,
+            'data'    => isset($data->data) ? json_decode($data->data) : null
+        ];
     }
 }
