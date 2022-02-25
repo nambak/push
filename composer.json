@@ -15,7 +15,7 @@
         "laravel/sanctum": "^2.11",
         "laravel/slack-notification-channel": "^2.3",
         "laravel/tinker": "^2.5",
-        "sentry/sentry-laravel": "^2.10"
+        "sentry/sentry-laravel": "^2.11"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

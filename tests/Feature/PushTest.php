@@ -20,4 +20,19 @@ class PushTest extends TestCase
 
         dump($response->getContent());
     }
+
+    /** @test */
+    public function test_user_push_send_api()
+    {
+        $response = $this->post('/api/send_test_push', [
+            'title' => '테스트 푸시 전송',
+            'message' => '테스트 푸시 입니다.',
+        ]);
+
+        $response->dump();
+
+        $response->assertSuccessful();
+    }
+
+
 }

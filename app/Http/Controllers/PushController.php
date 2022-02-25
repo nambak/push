@@ -12,6 +12,10 @@ class PushController extends Controller
     {
         $tokens = User::getAllowPushMessage();
 
+        if (count($tokens) === 0) {
+            return response('no user has a device key', 400);
+        }
+
         return $this->sendPush($request, $tokens);
     }
 
@@ -19,13 +23,17 @@ class PushController extends Controller
     {
         $tokens = User::getTestUser();
 
+        if (count($tokens) === 0) {
+            return response('no registered test user', 400);
+        }
+
         return $this->sendPush($request, $tokens);
     }
 
     private function sendPush($request, $tokens)
     {
         $validate = $request->validate([
-            'title' => 'string|required',
+            'title'   => 'string|required',
             'message' => 'string|required',
         ]);
 
@@ -33,8 +41,8 @@ class PushController extends Controller
             'title'   => $validate['title'],
             'message' => $validate['message'],
             'tokens'  => $tokens,
-            'image'   => $request->isFilled('image') ? $request->image : null,
-            'data'    => $request->isFilled('data') ? $request->data : null,
+            'image'   => $request->filled('image') ? $request->image : null,
+            'data'    => $request->filled('data') ? $request->data : null,
         ]);
 
         return $response;
