@@ -42,12 +42,26 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function pushTestUser()
+    {
+        return $this->hasOne(TestPushUser::class);
+    }
+
     public static function getAllowPushMessage()
     {
         return self::where([
             ['send_marketing_push' , 1],
             ['send_push_message', 1]
         ])
+            ->whereNotNull('device_key')
+            ->get()
+            ->pluck('device_key')
+            ->toArray();
+    }
+
+    public static function getTestUser()
+    {
+        return self::whereHas('pushTestUser')
             ->whereNotNull('device_key')
             ->get()
             ->pluck('device_key')

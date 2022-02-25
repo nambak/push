@@ -12,12 +12,29 @@ class PushController extends Controller
     {
         $tokens = User::getAllowPushMessage();
 
+        return $this->sendPush($request, $tokens);
+    }
+
+    public function testSend(Request $request)
+    {
+        $tokens = User::getTestUser();
+
+        return $this->sendPush($request, $tokens);
+    }
+
+    private function sendPush($request, $tokens)
+    {
+        $validate = $request->validate([
+            'title' => 'string|required',
+            'message' => 'string|required',
+        ]);
+
         $response = CloudMessaging::send([
-            'title'   => $request->title,
-            'message' => $request->message,
+            'title'   => $validate['title'],
+            'message' => $validate['message'],
             'tokens'  => $tokens,
-            'image'   => $request->filled('image') ? $request->image : null,
-            'data'    => $request->filled('data') ? $request->data : null,
+            'image'   => $request->isFilled('image') ? $request->image : null,
+            'data'    => $request->isFilled('data') ? $request->data : null,
         ]);
 
         return $response;

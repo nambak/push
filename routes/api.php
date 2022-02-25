@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PushController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,4 +19,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/send_push', [\App\Http\Controllers\PushController::class, 'send']);
+Route::post('/send_push', [PushController::class, 'send']);
+Route::post('/send_test_push', [PushController::class, 'testSend']);
+
