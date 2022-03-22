@@ -91,6 +91,26 @@ return [
             'prefix_indexes' => true,
         ],
 
+        'aurora' => [
+            'read' => [
+                'host' => [
+                    env('READ_DATABASE_URL')
+                ],
+            ],
+            'write' => [
+                'host' => [
+                    env('WRITE_DATABASE_URL')
+                ],
+            ],
+            'sticky' => true,
+            'driver' => 'mysql',
+            'database' => env('DB_DATABASE'),
+            'username' => env('DB_USERNAME'),
+            'password' => env('DB_PASSWORD'),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+        ],
     ],
 
     /*
