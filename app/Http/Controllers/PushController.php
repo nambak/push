@@ -42,7 +42,7 @@ class PushController extends Controller
             'message' => $validate['message'],
             'tokens'  => $tokens,
             'image'   => $request->filled('image') ? $request->image : null,
-            'data'    => $request->filled('data') ? $request->data : null,
+            'data'    => $request->filled('link') ? $request->link : null,
         ]);
 
         return $response;
