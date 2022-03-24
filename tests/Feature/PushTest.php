@@ -40,7 +40,7 @@ class PushTest extends TestCase
         $response = $this->post('/api/send_test_push', [
             'title'   => '테스트 푸시 전송',
             'message' => '테스트 푸시 입니다. 앱링크도 전송합니다.',
-            'link'    => '{"name":"productList","id":6}',
+            'data'    => ["name" =>"productList","id" => 6],
         ]);
 
         $response->dump();

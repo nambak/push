@@ -6,6 +6,7 @@ use App\Firebase\NotificationBuilder as PayloadNotificationBuilder;
 use App\Models\PushReservation;
 use App\Models\User;
 use App\Notifications\SendReservationPush;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification as SlackNotification;
 use LaravelFCM\Facades\FCM;
 use LaravelFCM\Message\OptionsBuilder;
@@ -29,12 +30,14 @@ class CloudMessaging
         $dataBuilder = new PayloadDataBuilder();
 
         if (isset($params['data'])) {
-            $dataBuilder->addData($params['data']);
+            $dataBuilder->addData(['data' => $params['data']]);
         }
 
         $option = $optionBuilder->build();
         $notification = $notificationBuilder->build();
         $data = $dataBuilder->build();
+
+        Log::info(dump($data));
 
         $downstreamResponse = FCM::sendTo($params['tokens'], $option, $notification, $data);
 
