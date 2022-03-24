@@ -22,6 +22,8 @@ class PushController extends Controller
 
     public function testSend(Request $request)
     {
+        Log::info(dump($request->all()));
+
         $tokens = User::getTestUser();
 
         if (count($tokens) === 0) {
@@ -45,8 +47,6 @@ class PushController extends Controller
             'image'   => $request->filled('image') ? $request->image : null,
             'data'    => $request->filled('link') ? $request->link : null,
         ]);
-
-        Log::info($request->all());
 
         return $response;
     }
