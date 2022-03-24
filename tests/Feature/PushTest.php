@@ -34,5 +34,18 @@ class PushTest extends TestCase
         $response->assertSuccessful();
     }
 
+    /** @test */
+    public function test_user_push_send_api_with_app_link()
+    {
+        $response = $this->post('/api/send_test_push', [
+            'title' => '테스트 푸시 전송',
+            'message' => '테스트 푸시 입니다. 앱링크도 전송합니다.',
+            'link' => '{"name":"searchResult","id":"논알콜"}'
+        ]);
+
+        $response->dump();
+
+        $response->assertSuccessful();
+    }
 
 }
