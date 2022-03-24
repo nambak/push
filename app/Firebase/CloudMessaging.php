@@ -29,7 +29,7 @@ class CloudMessaging
         $dataBuilder = new PayloadDataBuilder();
 
         if (isset($params['data'])) {
-            $dataBuilder->addData(json_decode($params['data'], true));
+            $dataBuilder->addData($params['data']);
         }
 
         $option = $optionBuilder->build();
