@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Firebase\CloudMessaging;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class PushController extends Controller
 {
@@ -44,6 +45,8 @@ class PushController extends Controller
             'image'   => $request->filled('image') ? $request->image : null,
             'data'    => $request->filled('link') ? $request->link : null,
         ]);
+
+        Log::info($request->all());
 
         return $response;
     }
