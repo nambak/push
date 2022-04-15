@@ -37,8 +37,6 @@ class CloudMessaging
         $notification = $notificationBuilder->build();
         $data = $dataBuilder->build();
 
-        Log::info(dump($data));
-
         $downstreamResponse = FCM::sendTo($params['tokens'], $option, $notification, $data);
 
         $results = [

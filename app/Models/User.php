@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -49,11 +50,14 @@ class User extends Authenticatable
 
     public static function getAllowPushMessage()
     {
-        return self::where([
-            ['send_marketing_push' , 1],
-            ['send_push_message', 1]
-        ])
+        return DB::table('users')
+            ->select('device_key')
+            ->where([
+                ['send_marketing_push',  1],
+                ['send_push_message', 1]
+            ])
             ->whereNotNull('device_key')
+            ->groupBy('device_key')
             ->get()
             ->pluck('device_key')
             ->toArray();
