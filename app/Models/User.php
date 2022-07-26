@@ -67,6 +67,10 @@ class User extends Authenticatable
     {
         return self::whereHas('pushTestUser')
             ->whereNotNull('device_key')
+            ->where([
+                ['send_marketing_push',  1],
+                ['send_push_message', 1]
+            ])
             ->get()
             ->pluck('device_key')
             ->toArray();
