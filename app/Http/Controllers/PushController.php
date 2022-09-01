@@ -21,7 +21,7 @@ class PushController extends Controller
 
     public function testSend(Request $request)
     {
-        $tokens = User::getTestUser();
+        $tokens = User::getAllowPushMessage();
 
         if (count($tokens) === 0) {
             return response('no registered test user', 400);
