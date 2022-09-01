@@ -1,4 +1,4 @@
-@servers(['prod' => ['ubuntu@3.38.102.203']])
+@servers(['prod' => ['ubuntu@13.125.43.58']])
 
 @task('deploy', ['on' => 'prod'])
 cd /var/www/push
