@@ -38,7 +38,7 @@ class SendReservationPush extends Notification
     public function toSlack($notifiable)
     {
         return (new SlackMessage)
-            ->from('10min-bot')
+            ->from('bot')
             ->to('push-inbox')
             ->content($this->message->title . ' 푸시가 발송되었습니다.');
     }
